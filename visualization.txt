@@ -117,3 +117,6 @@ print('Duration: {} seconds'.format(time.time() - start))
 plot_2d(X_LDA[:, 0],X_LDA[:, 1])
 — LDA— 3D —
 plot_3d(X_LDA[:, 0],X_LDA[:, 1],X_LDA[:, 2])
+
+Dataset Image2Weather
+https://www.cs.ccu.edu.tw/~wtchu/projects/Weather/index.html
