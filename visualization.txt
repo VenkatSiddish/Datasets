@@ -120,3 +120,5 @@ plot_3d(X_LDA[:, 0],X_LDA[:, 1],X_LDA[:, 2])
 
 Dataset Image2Weather
 https://www.cs.ccu.edu.tw/~wtchu/projects/Weather/index.html
+Dataset 
+https://drive.google.com/drive/folders/1fnKv_3DTv5FnC1XM7mfoaz8CJpKf899F?usp=sharing
