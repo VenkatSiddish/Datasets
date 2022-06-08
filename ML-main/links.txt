@@ -1,0 +1,6 @@
+https://www.kaggle.com/datasets/fceb22ab5e1d5288200c0f3016ccd626276983ca1fe8705ae2c32f7064d719de
+
+https://drive.google.com/drive/folders/1fnKv_3DTv5FnC1XM7mfoaz8CJpKf899F
+
+https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial17/SimCLR.html
+
