@@ -23,7 +23,8 @@ from PIL import Image
 from sklearn.decomposition import PCA
 
 dir= '/home/ameeth/WC/'
-categories=['Cloud','Rain','Sunrise','Foggy']
+#categories=['Cloud','Rain','Sunrise','Foggy']
+categories=['Cloud','Rain','Shine','Sunrise']
 #categories=['HAZE','RAINY','SUNNY','SNOWY']
 #categories=['Cloudy','Foggy','Sunny','Snowy','Rainy']
 
@@ -91,15 +92,15 @@ xtrain,xtest,ytrain,ytest = train_test_split(
 from sklearn.svm import SVC
 model=SVC(C=1,kernel='linear',gamma='auto')
 model.fit(xtrain,ytrain)
-prediction=model.predict(xtest)
+svc_prediction=model.predict(xtest)
 accuracy1=model.score(xtest,ytest)
 accuracy_train1=model.score(xtrain,ytrain)
 
 print('Training accuracy', accuracy_train1)
 
 print('Test Accuracy',accuracy1)
-print('Prediction is: ',categories[prediction[0]])
-cm=confusion_matrix(ytest,prediction)
+print('Prediction is: ',categories[svc_prediction[0]])
+cm=confusion_matrix(ytest,svc_prediction)
 print(cm)
 import seaborn as sns
 group_counts = ["{0:0.0f}".format(value) for value in cm.flatten()]
@@ -126,6 +127,11 @@ accuracies["SVM"]=scores.max()
 prediction=cross_val_predict(clf,reduced_features,labels_resnet)
 cm=confusion_matrix(labels_resnet,prediction)
 print(cm)
+
+from sklearn.metrics import classification_report
+target_names = ['Cloud', 'Rain', 'Shine','Sunrise']
+print(classification_report(ytest, svc_prediction, target_names=target_names))
+
 ##########################################################################################################################################################################
 k=6
 from sklearn.ensemble import RandomForestClassifier
@@ -175,6 +181,9 @@ prediction=cross_val_predict(clf,reduced_features,labels_resnet)
 cm=confusion_matrix(labels_resnet,prediction)
 print(cm)
 
+from sklearn.metrics import classification_report
+target_names = ['Cloud', 'Rain', 'Shine','Sunrise']
+print(classification_report(ytest, forest_predictions, target_names=target_names))
 ##########################################################################################################################################################################
 
 
@@ -227,7 +236,9 @@ prediction=cross_val_predict(clf,reduced_features,labels_resnet)
 cm=confusion_matrix(labels_resnet,prediction)
 print(cm)
 
-
+from sklearn.metrics import classification_report
+target_names = ['Cloud', 'Rain', 'Shine','Sunrise']
+print(classification_report(ytest, knn_predictions, target_names=target_names))
 ##########################################################################################################################################################################
 
 
@@ -272,7 +283,9 @@ prediction=cross_val_predict(clf,reduced_features,labels_resnet)
 cm=confusion_matrix(labels_resnet,prediction)
 print(cm)
 
-
+from sklearn.metrics import classification_report
+target_names = ['Cloud', 'Rain', 'Shine','Sunrise']
+print(classification_report(ytest, dtree_predictions, target_names=target_names))
 
 ##########################################################################################################################################################################
 
@@ -325,7 +338,9 @@ prediction=cross_val_predict(clf,reduced_features,labels_resnet)
 cm=confusion_matrix(labels_resnet,prediction)
 print(cm)
 
-
+from sklearn.metrics import classification_report
+target_names = ['Cloud', 'Rain', 'Shine','Sunrise']
+print(classification_report(ytest, gnb_predictions, target_names=target_names))
 
 
 ##########################################################################################################################################################################
@@ -367,17 +382,14 @@ ax.xaxis.set_ticklabels(categories)
 ax.yaxis.set_ticklabels(categories)
 ## Display the visualization of the Confusion Matrix.
 plt.show()
-
 from sklearn.model_selection import cross_val_score,cross_val_predict
 clf = VotingClassifier(estimators=[('rf',rfc),('sv',svcc),('kn',knn),('lr',lrc)],voting='hard')
 scores = cross_val_score(clf, reduced_features, labels_resnet, cv=10)
-
 print(scores)
 accuracies["VTC"]=[scores.max(),accuracy_train6]
 prediction=cross_val_predict(clf,reduced_features,labels_resnet)
 cm=confusion_matrix(labels_resnet,prediction)
 print(cm)
-
 '''
 print(accuracies)
 
