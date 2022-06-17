@@ -19,3 +19,8 @@ https://drive.google.com/file/
 
 3.  Multi-Class Weather Classification Using ResNet-18 CNN for Autonomous IoT and CPS Applications 
 https://drive.google.com/
+
+Timm Models:
+https://towardsdatascience.com/getting-started-with-pytorch-image-models-timm-a-practitioners-guide-4e77b4bf9055
+https://github.com/rwightman/pytorch-image-models
+https://timm.fast.ai/
