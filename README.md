@@ -24,3 +24,4 @@ Timm Models:
 https://towardsdatascience.com/getting-started-with-pytorch-image-models-timm-a-practitioners-guide-4e77b4bf9055
 https://github.com/rwightman/pytorch-image-models
 https://timm.fast.ai/
+Vision Models available on PyTorch: https://pytorch.org/vision/main/models.html
