@@ -25,3 +25,6 @@ https://towardsdatascience.com/getting-started-with-pytorch-image-models-timm-a-
 https://github.com/rwightman/pytorch-image-models
 https://timm.fast.ai/
 Vision Models available on PyTorch: https://pytorch.org/vision/main/models.html
+
+
+LDA vs PCA:https://medium.com/machine-learning-researcher/dimensionality-reduction-pca-and-lda-6be91734f567
