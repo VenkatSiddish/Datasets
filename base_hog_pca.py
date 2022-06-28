@@ -20,16 +20,19 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 from PIL import Image
+import time
 
 #Directory and Categories for classification
 dir= '/home/ameeth/WC/'
 
+
 categories=['Cloudy','Rain','Shine','Sunrise']
 target_names = ['Cloudy','Rain','Shine','Sunrise']
+#categories=['HAZE','RAINY','SUNNY','SNOWY']
+#target_names=['HAZE','RAINY','SUNNY','SNOWY']
+#Opening feature pickle files
 
-#Opening feature picle files
-
-pick_in=open('denseNet201_1125.pickle','rb')
+pick_in=open('resNet101_1125.pickle','rb')
 data1=pickle.load(pick_in)
 pick_in.close()
 
@@ -68,37 +71,66 @@ norm2=normalize(features_hog)
 
 #normed=np.concatenate((norm1,norm2),axis=1)
 
+from sklearn.decomposition import PCA
+pca=PCA(n_components=0.95)
+#px1=pca1.fit_transform(X_4_1)
+#px2=pca.fit_transform(X_4_2)
+px1=pca.fit_transform(norm1)
+px2=pca.fit_transform(norm2)
+
+print(px1.shape,px2.shape)
+
+
 #Feature Selection Using Mututal Information
 
+from sklearn.feature_selection import SelectPercentile as SP
+selector1 = SP(percentile=90) # select features with top 50% MI scores
+
+selector1.fit(px1,labels_new)
+X_4_1 = selector1.transform(px1)
+#X_4_1 = selector1.transform(px1)
+print(X_4_1.shape, type(X_4_1))
+
+selector2 = SP(percentile=90) # select features with top 50% MI scores
+selector2.fit(px2,labels_new)
+X_4_2 = selector2.transform(px2)
+print(X_4_2.shape, type(X_4_2))
+
+'''
 from sklearn.feature_selection import SelectPercentile as SP
 selector1 = SP(percentile=50) # select features with top 50% MI scores
 
 selector1.fit(norm1,labels_new)
 X_4_1 = selector1.transform(norm1)
+#X_4_1 = selector1.transform(px1)
 print(X_4_1.shape, type(X_4_1))
 
 selector2 = SP(percentile=50) # select features with top 50% MI scores
 selector2.fit(norm2,labels_new)
 X_4_2 = selector2.transform(norm2)
 print(X_4_2.shape, type(X_4_2))
-
 #normed=np.concatenate((X_4_1,X_4_2),axis=1)
+
 #Feature Reduction using PCA
 
 from sklearn.decomposition import PCA
 pca=PCA(n_components=0.95)
 px1=pca.fit_transform(X_4_1)
 px2=pca.fit_transform(X_4_2)
-print(px1.shape,px2.shape)
+#px1=pca.fit_transform(norm1)
+#px2=pca.fit_transform(norm2)
 
+print(px1.shape,px2.shape)
+'''
 
 normed=np.concatenate((px1,px2),axis=1)
+#normed=np.concatenate((X_4_1,X_4_2),axis=1)
 
 
 df_new=pd.DataFrame(normed)
 df_new['labels']=pd.DataFrame(labels_new)
 print(df_new.head())
-shuffled = df_new.sample(frac=1).reset_index()
+shuffled = df_new.sample(frac=1,random_state=42).reset_index()
 shuffled.drop(shuffled.columns[0],axis=1,inplace=True)
 print(shuffled.head())
 labels=shuffled.iloc[:,-1]
@@ -116,7 +148,7 @@ accuracies={}
 mean_accuracies={}
 ##########################################################################################################################################################################
 #SVC 
-
+'''
 import time
 start=time.time()
 from sklearn.svm import SVC
@@ -129,10 +161,11 @@ accuracy_train1=model.score(xtrain,ytrain)
 print('Training accuracy', accuracy_train1)
 
 print('Test Accuracy',accuracy1)
+exit()
 print('Prediction is: ',categories[svc_prediction[0]])
 cm=confusion_matrix(ytest,svc_prediction)
 print(cm)
-'''
+
 import seaborn as sns
 group_counts = ["{0:0.0f}".format(value) for value in cm.flatten()]
 group_percentages = ["{0:.2%}".format(value) for value in cm.flatten()/np.sum(cm)]
@@ -148,7 +181,7 @@ ax.xaxis.set_ticklabels(categories)
 ax.yaxis.set_ticklabels(categories)
 ## Display the visualization of the Confusion Matrix.
 plt.show()
-'''
+
 from sklearn.model_selection import cross_val_score,cross_val_predict
 clf = SVC(kernel='linear', C=1, random_state=42)
 
@@ -170,7 +203,7 @@ from sklearn.metrics import classification_report
 print(classification_report(ytest, svc_prediction, target_names=target_names))
 
 print(time.time()-start)
-
+'''
 ##########################################################################################################################################################################
 #Random Forest Classifier
 
@@ -178,7 +211,18 @@ print(time.time()-start)
 start=time.time()
 k=6
 from sklearn.ensemble import RandomForestClassifier
-rfc_model=RandomForestClassifier(max_depth=k,n_estimators=300)
+'''
+from sklearn.model_selection import GridSearchCV
+# defining parameter range
+param_grid = {  'bootstrap': [True], 'max_depth': [5,6,7,8], 'max_features': ['auto', 'log2'], 'n_estimators': [100,200,300,400,500]}
+model = GridSearchCV(RandomForestClassifier(), param_grid, refit = True, verbose = 3,scoring='accuracy')
+# fitting the model for grid search
+model.fit(xtrain, ytrain)
+print(model.best_params_)
+print(model.best_score_)
+exit()
+'''
+rfc_model=RandomForestClassifier(bootstrap= True, max_depth=8, max_features= 'auto', n_estimators= 300)
 rfc_model.fit(xtrain,ytrain)
 forest_predictions= rfc_model.predict(xtest)
 accuracy2=rfc_model.score(xtest,ytest)
@@ -194,6 +238,7 @@ print('Prediction is: ',categories[forest_predictions[0]])
 # creating a confusion matrix
 cm = confusion_matrix(ytest, forest_predictions)
 print(cm)
+
 '''
 import seaborn as sns
 group_counts = ["{0:0.0f}".format(value) for value in cm.flatten()]
@@ -213,6 +258,7 @@ ax.yaxis.set_ticklabels(categories)
 ## Display the visualization of the Confusion Matrix.
 plt.show()
 '''
+'''
 from sklearn.model_selection import cross_val_score,cross_val_predict
 clf = RandomForestClassifier()
 
@@ -230,6 +276,7 @@ from sklearn.metrics import classification_report
 
 print(classification_report(ytest, forest_predictions, target_names=target_names))
 print(time.time()-start)
+'''
 ##########################################################################################################################################################################
 #K Nearest Neighbors
 
@@ -251,6 +298,7 @@ print('Prediction is: ',categories[knn_predictions[0]])
 
 cm = confusion_matrix(ytest, knn_predictions)
 print(cm)
+exit()
 '''
 import seaborn as sns
 group_counts = ["{0:0.0f}".format(value) for value in cm.flatten()]
