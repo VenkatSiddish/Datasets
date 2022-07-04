@@ -28,3 +28,4 @@ Vision Models available on PyTorch: https://pytorch.org/vision/main/models.html
 
 
 LDA vs PCA:https://medium.com/machine-learning-researcher/dimensionality-reduction-pca-and-lda-6be91734f567
+Model Accuracy not enough metric:-https://medium.com/@sphoebs/stop-using-accuracy-to-assess-your-ml-models-73d4fff55beb
