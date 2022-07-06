@@ -31,3 +31,4 @@ LDA vs PCA:https://medium.com/machine-learning-researcher/dimensionality-reducti
 Model Accuracy not enough metric:-https://medium.com/@sphoebs/stop-using-accuracy-to-assess-your-ml-models-73d4fff55beb
 https://jamesmccaffrey.wordpress.com/2021/01/22/how-to-calculate-expected-calibration-error-for-multi-class-classification/
 Precision-recall curve: https://analyticsindiamag.com/complete-guide-to-understanding-precision-and-recall-curves/
+https://jamesmccaffrey.wordpress.com/2021/01/22/how-to-calculate-expected-calibration-error-for-multi-class-classification/
